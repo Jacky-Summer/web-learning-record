@@ -1,15 +1,36 @@
-const { WebSocketServer } = require('ws')
+const WebSocket = require('ws')
 
-const wss = new WebSocketServer({ port: 8080 })
+const wss = new WebSocket.WebSocketServer({ port: 8080 })
+let onlineCount = 0 // 在线人数
 
 wss.on('connection', function connection(ws) {
-  ws.on('message', function message(data) {
-    wss.clients.forEach((message) => {
-      ws.send(message)
+  ws.on('message', function (data) {
+    const jsonMessage = JSON.parse(data)
+    if (jsonMessage.type === 'enter') {
+      onlineCount++
+      ws.name = jsonMessage.name
+    }
+
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        jsonMessage.name = ws.name
+        jsonMessage.onlineCount = onlineCount
+        client.send(JSON.stringify(jsonMessage))
+      }
     })
   })
 
-  ws.on('close', function () {})
-
-  ws.send('something')
+  // ws.on('close', function () {
+  //   if (ws.name) {
+  //     onlineCount--
+  //   }
+  //   wss.clients.forEach((client) => {
+  //     if (client.readyState === WebSocket.OPEN) {
+  //       jsonMessage.name = ws.name
+  //       jsonMessage.onlineCount = onlineCount
+  //       jsonMessage.type = 'leave'
+  //       client.send(JSON.stringify(msgObj))
+  //     }
+  //   })
+  // })
 })
