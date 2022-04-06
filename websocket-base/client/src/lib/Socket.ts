@@ -1,16 +1,19 @@
 import Emitter from './emitter'
-import { ISocketMessage, SocketReadyStates, ISocketOptions, EventName } from '../types'
+import { ISocketMessage, SocketReadyStates, ISocketOptions, EventName, Heartbeats } from '../types'
 
 class Socket extends Emitter {
   private readonly _url: string
   private readonly _options: ISocketOptions
   private _ws: WebSocket | null
+  private _heartbeatTimer: number | null
+  private static readonly SEND_HEARTBEAT_INTERVAL = 2_000
 
   constructor(url: string, options: ISocketOptions = {}) {
     super()
     this._url = url
     this._options = options
     this._ws = null
+    this._heartbeatTimer = null
 
     this._createSocket()
   }
@@ -32,6 +35,7 @@ class Socket extends Emitter {
   private _onOpen(e: WebSocketEventMap['open']) {
     this.emit(EventName.SOCKET_OPEN, e)
     this._options.debug && console.log('--- websocket connected ---')
+    this._sendHeartbeat()
   }
 
   send(message: ISocketMessage) {
@@ -59,6 +63,16 @@ class Socket extends Emitter {
   private _onError(e: WebSocketEventMap['error']) {
     this.emit(EventName.SOCKET_ERROR, e)
     this._options.debug && console.log('--- websocket error ---', e)
+  }
+
+  private _sendHeartbeat() {
+    if (this._ws && this._options.heartbeat) {
+      this._heartbeatTimer && clearInterval(this._heartbeatTimer)
+      const { interval = Socket.SEND_HEARTBEAT_INTERVAL, params = Heartbeats.PING } = this._options.heartbeat
+      this._heartbeatTimer = setInterval(() => {
+        this._ws?.send(params)
+      }, interval)
+    }
   }
 }
 
