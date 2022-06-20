@@ -11,8 +11,12 @@ wss.on('connection', function connection(ws) {
       ws.name = jsonMessage.name
     }
 
+    if (jsonMessage.type === 'ping') {
+      ws.send(JSON.stringify({ type: 'pong' }))
+    }
+
     wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
+      if (client.readyState === WebSocket.OPEN && jsonMessage.type !== 'ping') {
         jsonMessage.name = ws.name
         jsonMessage.onlineCount = onlineCount
         client.send(JSON.stringify(jsonMessage))

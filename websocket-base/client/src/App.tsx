@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Socket from './lib/socket'
-import { EventName, IMessage } from './types'
+import { EventName, IMessage, Heartbeats } from './types'
 
 function App() {
   const [message, setMessage] = useState('')
@@ -12,7 +12,14 @@ function App() {
 
   useEffect(() => {
     if (isEnter && !wsRef.current) {
-      wsRef.current = new Socket('ws://127.0.0.1:8080')
+      wsRef.current = new Socket('ws://127.0.0.1:8080', {
+        heartbeat: {
+          interval: 3_000,
+          params: JSON.stringify({
+            type: Heartbeats.PING,
+          }),
+        },
+      })
 
       wsRef.current.on(EventName.SOCKET_OPEN, onOpen)
       wsRef.current.on(EventName.SOCKET_MESSAGE, onMessage)
@@ -54,8 +61,13 @@ function App() {
         updateChatList(`${message.name}已经退出了聊天室`)
         break
       }
+      case 'pong': {
+        break
+      }
     }
-    setOnlineCount(message.onlineCount)
+    if (message.type !== 'pong') {
+      setOnlineCount(message.onlineCount)
+    }
     console.log('收到的消息：', message)
   }
 

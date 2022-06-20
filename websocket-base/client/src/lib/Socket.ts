@@ -69,7 +69,7 @@ class Socket extends Emitter {
     if (this._ws && this._options.heartbeat) {
       this._heartbeatTimer && clearInterval(this._heartbeatTimer)
       const { interval = Socket.SEND_HEARTBEAT_INTERVAL, params = Heartbeats.PING } = this._options.heartbeat
-      this._heartbeatTimer = setInterval(() => {
+      this._heartbeatTimer = setTimeout(() => {
         this._ws?.send(params)
       }, interval)
     }
