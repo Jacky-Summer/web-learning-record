@@ -1,2 +1,1 @@
-export default 'my_title_name'
-export const age = 100
+export default 'lazyName'
