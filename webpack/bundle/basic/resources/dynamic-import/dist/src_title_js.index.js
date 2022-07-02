@@ -3,7 +3,7 @@
   ['src_title_js'], // 额外懒加载的模块ID./src/title.js ，它对应的代码块ID src_title_js代码块ID
   {
     './src/title.js': (__unused_webpack_module, exports, require) => {
-      require.r(exports)
+      require.r(exports) // 声明为esm
       require.d(exports, {
         default: () => __WEBPACK_DEFAULT_EXPORT__,
       })
