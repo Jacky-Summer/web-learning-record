@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "b0e742e29b30d19c6053";
+/******/ 	var hotCurrentHash = "9d57952eb8f0b5d0e212";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -893,7 +893,7 @@ if (true) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = 'myTitle2'
+module.exports = 'myTitle24'
 
 
 /***/ })

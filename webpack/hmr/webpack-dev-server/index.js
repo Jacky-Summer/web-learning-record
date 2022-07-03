@@ -6,6 +6,6 @@ const Server = require('./lib/server')
 const compiler = webpack(config)
 
 const server = new Server(compiler)
-server.listen(9090, () => {
-  console.log('server run on http://localhost:9090')
+server.listen(9092, () => {
+  console.log('server run on http://localhost:9092')
 })
