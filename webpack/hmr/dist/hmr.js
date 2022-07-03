@@ -69,20 +69,20 @@ let hotEmitter = new EventEmitter()
 
   let hotUpdate = {}
   function hotAddUpdateChunk(chunkId, moreModules) {
-    for (let moduleId of moreModules) {
+    for (let moduleId in moreModules) {
       modules[moduleId] = hotUpdate[moduleId] = moreModules[moduleId]
     }
     hotApply()
   }
 
   function hotApply() {
-    for (let moduleId of hotUpdate) {
+    for (let moduleId in hotUpdate) {
       // ./src/title.js
       let oldModule = installedModules[moduleId] // 旧的 ./src/title.js 模块
       delete installedModules[moduleId] // 把旧模块从模块缓存中删除掉
       // 循环所有父模块
       oldModule.parents.forEach((parentModule) => {
-        let callback = parentModule.hot_acceptedDependencies[module]
+        let callback = parentModule.hot._acceptedDependencies[moduleId]
         // 取出父模块的回调，有则执行
         callback && callback()
       })
@@ -176,6 +176,7 @@ let hotEmitter = new EventEmitter()
       if (!lastHash) {
         lastHash = currentHash
         console.log('lastHash', lastHash, 'currentHash', currentHash)
+        return
       }
       // 调用hot.check方法向服务器检查更新并且拉取最新的代码
       module.hot.check()

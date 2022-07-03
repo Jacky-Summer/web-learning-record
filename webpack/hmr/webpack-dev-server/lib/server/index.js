@@ -105,7 +105,7 @@ class Server {
       this.clientSocketList.push(socket)
       socket.emit('ok')
       socket.on('disconnect', () => {
-        const index = this.clientSocketList.index(socket)
+        const index = this.clientSocketList.indexOf(socket)
         this.clientSocketList.splice(index, 1)
       })
     })
