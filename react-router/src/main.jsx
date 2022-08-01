@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter } from './react-router-dom'
+import { Route } from 'react-router-dom'
 import Home from './components/Home'
 import Detail from './components/Detail'
 import List from './components/List'
