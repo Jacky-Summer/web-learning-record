@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "history": "4.9.0",
+    "history": "^4.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "5.2.1",
