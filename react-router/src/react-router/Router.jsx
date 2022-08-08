@@ -9,6 +9,20 @@ class Router extends React.Component {
     this.state = {
       location: props.history.location,
     }
+
+    // 当监听到路由发生变化后会执行回调
+    const listener = (location) => {
+      console.log('listen')
+      this.setState({
+        location,
+      })
+    }
+
+    this.unListen = props.history.listen(listener)
+  }
+
+  componentWillMount() {
+    this.unListen()
   }
 
   render() {
