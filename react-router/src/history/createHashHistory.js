@@ -2,7 +2,7 @@
 const HashChangeEvent = 'hashchange'
 
 const createHashHistory = (props) => {
-  let historyStack = [] // 类似于历史栈 location={pathname,state}
+  const globalHistory = window.history
   let action = 'POP' // 代表当前的动作
   let state // 代表当前的状态
   const listeners = [] //监听函数组成的数组
@@ -14,8 +14,41 @@ const createHashHistory = (props) => {
     return () => (listeners) => listeners.filter((l) => l !== listener)
   }
 
+  const push = (path, nextState) => {
+    action = 'PUSH'
+    if (typeof path === 'object') {
+      path = path.pathname
+      state = path.state
+    } else {
+      state = nextState
+    }
+    window.location.hash = path
+  }
+
+  const history = {
+    length: globalHistory.length,
+    action: 'POP', // 当前的动作
+    listen,
+    push,
+    go,
+    goBack,
+    goForward,
+    location: { pathname: '/', state: undefined },
+  }
+
+  function go(n) {
+    globalHistory.go(n)
+  }
+
+  function goBack() {
+    go(-1)
+  }
+
+  function goForward() {
+    go(1)
+  }
+
   const handleHashChange = (event) => {
-    console.log('hashChangeHandler')
     const pathname = window.location.hash.slice(1)
     const location = { pathname, state }
     Object.assign(history, { action, location })
@@ -29,12 +62,6 @@ const createHashHistory = (props) => {
     handleHashChange()
   } else {
     window.location.hash = '/'
-  }
-
-  const history = {
-    action: 'POP', // 当前的动作
-    listen,
-    location: { pathname: '/', state: undefined },
   }
 
   return history
