@@ -21,7 +21,7 @@ class Router extends React.Component {
     this.unListen = props.history.listen(listener)
   }
 
-  componentWillMount() {
+  componentWillUnMount() {
     this.unListen()
   }
 
