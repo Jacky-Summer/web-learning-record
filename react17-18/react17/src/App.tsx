@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import Test from './Test'
+import Content from './Content'
 
 function App() {
   const [isShowText, setIsShowText] = useState(false)
+  const [isShowRefContent, setIsShowRefContent] = useState(true)
 
   // v17：去除了 React 事件池
   const handleClick = (e: React.MouseEvent) => {
@@ -30,7 +32,17 @@ function App() {
 
       <button onClick={handleShowText}>事件委托变更</button>
       {isShowText && <div>展示文字</div>}
+
       <Test />
+
+      <button
+        onClick={() => {
+          setIsShowRefContent(false)
+        }}
+      >
+        触发副作用销毁
+      </button>
+      {isShowRefContent && <Content />}
     </div>
   )
 }
