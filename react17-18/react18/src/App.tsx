@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { flushSync } from 'react-dom'
+import TransitionTest from './TransitionTest'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,6 +33,9 @@ function App() {
       <div>
         <button onClick={handleAutoBatching}>自动批处理</button>
       </div>
+
+      <h2>Transition Test</h2>
+      <TransitionTest />
     </div>
   )
 }
